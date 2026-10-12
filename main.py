@@ -59,7 +59,12 @@ def update():
         pyxel.quit()
 
     if state == "title":
-        if pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.KEY_RETURN):
+        if (
+            pyxel.btnp(pyxel.KEY_SPACE)
+            or pyxel.btnp(pyxel.KEY_RETURN)
+            or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A)
+            or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B)
+        ):
             start_game()
         return
 
@@ -70,18 +75,33 @@ def update():
             create_wave()
             state = "playing"
         elif state == "gameover" and (
-            pyxel.btnp(pyxel.KEY_SPACE) or pyxel.btnp(pyxel.KEY_RETURN)
+            pyxel.btnp(pyxel.KEY_SPACE)
+            or pyxel.btnp(pyxel.KEY_RETURN)
+            or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A)
+            or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B)
         ):
             start_game()
         return
 
-    if pyxel.btn(pyxel.KEY_LEFT) or pyxel.btn(pyxel.KEY_A):
+    if (
+        pyxel.btn(pyxel.KEY_LEFT)
+        or pyxel.btn(pyxel.KEY_A)
+        or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT)
+    ):
         player_x = max(4, player_x - 2)
-    if pyxel.btn(pyxel.KEY_RIGHT) or pyxel.btn(pyxel.KEY_D):
+    if (
+        pyxel.btn(pyxel.KEY_RIGHT)
+        or pyxel.btn(pyxel.KEY_D)
+        or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT)
+    ):
         player_x = min(WIDTH - 12, player_x + 2)
 
     shot_cooldown = max(0, shot_cooldown - 1)
-    if pyxel.btn(pyxel.KEY_SPACE) and shot_cooldown == 0:
+    if (
+        pyxel.btn(pyxel.KEY_SPACE)
+        or pyxel.btn(pyxel.GAMEPAD1_BUTTON_A)
+        or pyxel.btn(pyxel.GAMEPAD1_BUTTON_B)
+    ) and shot_cooldown == 0:
         player_bullets.append([player_x + 4, PLAYER_Y - 2])
         shot_cooldown = 12
 
@@ -177,8 +197,8 @@ def draw():
         pyxel.text(48, 22, "SPACE INVADERS", 10)
         draw_alien(76, 43, 8, 0)
         draw_player(76, 72)
-        pyxel.text(37, 91, "PRESS SPACE", 7)
-        pyxel.text(36, 103, "ARROWS / A,D  MOVE", 6)
+        pyxel.text(33, 91, "SPACE / A,B START", 7)
+        pyxel.text(36, 103, "ARROWS / D-PAD MOVE", 6)
         return
 
     pyxel.text(5, 5, "SCORE", 7)
@@ -208,7 +228,7 @@ def draw():
         pyxel.rect(31, 48, 98, 27, 1)
         pyxel.rectb(31, 48, 98, 27, 8)
         pyxel.text(57, 54, "GAME OVER", 8)
-        pyxel.text(39, 65, "SPACE TO RESTART", 7)
+        pyxel.text(35, 65, "SPACE / A,B RESTART", 7)
 
 
 pyxel.init(WIDTH, HEIGHT, title="Space Invaders")
